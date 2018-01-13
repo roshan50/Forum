@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Channel;
 use App\Thread;
+use App\Filters\ThreadFilters;
+use App\User;
 use Illuminate\Http\Request;
 use function auth;
 use function back;
@@ -22,9 +25,14 @@ class ThreadController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Channel $channel,ThreadFilters $filters)
     {
-        $threads = Thread::all();
+        $threads = $this->getThreads($channel, $filters);
+
+        if(\request()->wantsJson()){
+            return $threads;
+        }
+
         return view('threads.index',compact('threads'));
     }
 
@@ -46,8 +54,14 @@ class ThreadController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request,[
+            'title' => 'required',
+            'body'  => 'required',
+            'channel_id' => 'required|exists:channels,id'
+        ]);
         Thread::create([
            'user_id' => auth()->id(),
+           'channel_id' => request('channel_id'),
            'title'   => request('title'),
            'body'    => request('body')
         ]);
@@ -60,9 +74,12 @@ class ThreadController extends Controller
      * @param  \App\Thread  $thread
      * @return \Illuminate\Http\Response
      */
-    public function show(Thread $thread)
+    public function show($channelId,Thread $thread)
     {
-        return view('threads.show',compact('thread'));
+        return view('threads.show',[
+            'thread'    => $thread,
+            'replies'   => $thread->replies()->paginate(1)
+        ]);
     }
 
     /**
@@ -97,5 +114,22 @@ class ThreadController extends Controller
     public function destroy(Thread $thread)
     {
         //
+    }
+
+    /**
+     * @param Channel $channel
+     * @param ThreadFilters $filters
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function getThreads(Channel $channel, ThreadFilters $filters)
+    {
+        if ($channel->exists) {
+            $threads = $channel->threads();
+        } else {
+            $threads = Thread::latest();
+        }
+
+        $threads = $threads->filter($filters)->get();
+        return $threads;
     }
 }
