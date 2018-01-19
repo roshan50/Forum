@@ -5,8 +5,20 @@
             <div class="col-md-8">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <a href="#"> {{ $thread->creator->name }} </a> Posted:
-                        {{ $thread->title }}
+                        <div class="level">
+                            <span class="flex">
+                                <a href="/profiles/{{ $thread->creator->name }}"> {{ $thread->creator->name }} </a> Posted:
+                                    {{ $thread->title }}
+                            </span>
+
+                            @can('update',$thread)
+                                <form action="{{ $thread->path() }}" method="post">
+                                    {{ csrf_field() }}
+                                    {{ method_field('DELETE') }}
+                                    <button class="btn btn-link" type="submit">حذف</button>
+                                </form>
+                            @endcan
+                        </div>
                     </div>
 
                     <div class="panel-body">
@@ -40,7 +52,7 @@
                         {{ $thread->created_at->diffForHumans() }}
                         توسط  <a href="#">{{ $thread->creator->name }}</a>
                         ایجاد شده است و در حال حاضر
-                        {{ $thread->replies->count() }}
+                        {{ $thread->replies_count }}
                         پاسخ دارد.
                     </div>
                 </div>

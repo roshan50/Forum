@@ -11,6 +11,7 @@ use function auth;
 use function back;
 use function compact;
 use function redirect;
+use function response;
 use function view;
 
 class ThreadController extends Controller
@@ -78,7 +79,7 @@ class ThreadController extends Controller
     {
         return view('threads.show',[
             'thread'    => $thread,
-            'replies'   => $thread->replies()->paginate(1)
+            'replies'   => $thread->replies()->paginate(3)
         ]);
     }
 
@@ -111,9 +112,16 @@ class ThreadController extends Controller
      * @param  \App\Thread  $thread
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Thread $thread)
+    public function destroy($channel,Thread $thread)
     {
-        //
+        $this->authorize('update',$thread);
+        $thread->replies()->delete();
+        $thread->delete();
+        if(\request()->wantsJson()){
+            return response([],204);
+        }
+        return redirect('/threads');
+
     }
 
     /**
@@ -123,13 +131,11 @@ class ThreadController extends Controller
      */
     public function getThreads(Channel $channel, ThreadFilters $filters)
     {
-        if ($channel->exists) {
-            $threads = $channel->threads();
-        } else {
-            $threads = Thread::latest();
+        $threads =  Thread::latest()->filter($filters);
+        if($channel->exists){
+            $threads->where('channel_id',$channel->id);
         }
 
-        $threads = $threads->filter($filters)->get();
-        return $threads;
+        return $threads->get();
     }
 }
