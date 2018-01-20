@@ -10,21 +10,14 @@
                     </div>
 
                     <div class="panel-body">
-                        @foreach($threads as $thread)
-                            <article>
-                                <div class="level">
-                                    <h4 class="flex">
-                                        <a href="{{ $thread->path() }}">
-                                            {{ $thread->title }}
-                                        </a>
-                                    </h4>
-                                    <strong>{{ $thread->created_at->diffForHumans() }} </strong>
-                                </div>
-                                <div class="body"> {{ $thread->body }} </div>
-                            </article>
-                            <hr>
+                        @foreach($activities as $date => $activity)
+                            <h3 class="page-header">{{ $date }}</h3>
+                            @foreach($activity as $item)
+                                @if(view()->exists("profiles.activities.{$item->type}"))
+                                    @include("profiles.activities.{$item->type}" , ['activity' => $item])
+                                @endif
+                            @endforeach
                         @endforeach
-                        {{ $threads->links() }}
                     </div>
                 </div>
 

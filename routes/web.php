@@ -25,6 +25,8 @@ Route::get('threads/{channel}','ThreadController@index');
 
 Route::post('threads/{channel}/{thread}/replies','ReplyController@store')->name('add_reply');
 Route::post('/replies/{reply}/favorites','FavoriteController@store');
+Route::delete('/replies/{reply}','ReplyController@destroy');
+
 
 Auth::routes();
 

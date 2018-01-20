@@ -1,4 +1,4 @@
-<div class="panel panel-default">
+<div id="reply-{{ $reply->id }}" class="panel panel-default">
     <div class="panel-heading">
         <div class="level">
             <a href="/profiles/{{ $reply->owner->name }}" class="flex">{{ $reply->owner->name }}</a> said
@@ -17,5 +17,15 @@
 
     <div class="panel-body">
         {{ $reply->body }}
+    </div>
+
+    <div class="panel-footer">
+        @can('update',$reply)
+            <form action="/replies/{{ $reply->id }}" method="post">
+                {{ csrf_field() }}
+                {{ method_field('DELETE') }}
+                <button class="btn btn-danger btn-xs" type="submit">حذف</button>
+            </form>
+        @endcan
     </div>
 </div>

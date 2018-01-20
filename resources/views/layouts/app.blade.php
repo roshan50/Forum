@@ -30,6 +30,7 @@
       @include('layouts.nav')
 
         @yield('content')
+        <Flash message="{{ session('flash') }}"></Flash>
     </div>
 
     <!-- Scripts -->

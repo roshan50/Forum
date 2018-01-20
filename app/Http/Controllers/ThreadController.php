@@ -60,13 +60,14 @@ class ThreadController extends Controller
             'body'  => 'required',
             'channel_id' => 'required|exists:channels,id'
         ]);
-        Thread::create([
+        $thread = Thread::create([
            'user_id' => auth()->id(),
            'channel_id' => request('channel_id'),
            'title'   => request('title'),
            'body'    => request('body')
         ]);
-        return redirect('/threads');
+        return redirect($thread->path())
+            ->with('flash','بحث شما با موفقیت ایجاد شد!');
     }
 
     /**
@@ -115,7 +116,7 @@ class ThreadController extends Controller
     public function destroy($channel,Thread $thread)
     {
         $this->authorize('update',$thread);
-        $thread->replies()->delete();
+//        $thread->replies()->delete();
         $thread->delete();
         if(\request()->wantsJson()){
             return response([],204);

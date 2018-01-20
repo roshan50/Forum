@@ -2,10 +2,15 @@
 
 namespace App;
 
+use function auth;
+use function get_class;
 use Illuminate\Database\Eloquent\Model;
+use function strtolower;
 
 class Thread extends Model
 {
+    use RecordActivity;
+
     protected $guarded=[];
     protected $with=['creator','channel'];
 
@@ -19,7 +24,9 @@ class Thread extends Model
 //        static::addGlobalScope('creator',function ($builder){
 //            $builder->with('creator');
 //        });
-
+        static::deleting(function ($thread){
+            $thread->replies->each->delete();
+        });
     }
 
     public function path()
