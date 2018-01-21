@@ -23,6 +23,9 @@
         .flex{
             flex: 1;
         }
+        .ml-1{
+            margin-left: 1em;
+        }
     </style>
 </head>
 <body dir="rtl">

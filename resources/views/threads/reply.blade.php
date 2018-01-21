@@ -19,13 +19,14 @@
         {{ $reply->body }}
     </div>
 
-    <div class="panel-footer">
-        @can('update',$reply)
+    @can('update',$reply)
+        <div class="panel-footer level">
+            <button class="btn btn-xs ml-1">ویرایش</button>
             <form action="/replies/{{ $reply->id }}" method="post">
                 {{ csrf_field() }}
                 {{ method_field('DELETE') }}
                 <button class="btn btn-danger btn-xs" type="submit">حذف</button>
             </form>
-        @endcan
-    </div>
+        </div>
+    @endcan
 </div>
