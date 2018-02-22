@@ -26,6 +26,7 @@
                     </div>
                 </div>
 
+                <replies :data="{{ $thread->replies }}"></replies>
                 @foreach($replies as $reply)
                     @include('threads.reply')
                 @endforeach
@@ -35,8 +36,8 @@
                     <form action="{{  $thread->path() . '/replies' }}" method="post">
                         {{ csrf_field() }}
                         <div class="form-group">
-                    <textarea name="body" id="body" class="form-control"
-                              cols="30" rows="10" placeholder="نظر"></textarea>
+                            <textarea name="body" id="body" class="form-control"
+                                    placeholder="نظر"></textarea>
                         </div>
                         <button type="submit" class="btn btn-default">ارسال نظر</button>
                     </form>

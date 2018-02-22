@@ -26,14 +26,15 @@
         .ml-1{
             margin-left: 1em;
         }
+        [v-cloak] { display: none; }
     </style>
 </head>
 <body dir="rtl">
     <div id="app">
       @include('layouts.nav')
-
-        @yield('content')
         <Flash message="{{ session('flash') }}"></Flash>
+        @yield('content')
+
     </div>
 
     <!-- Scripts -->

@@ -10,14 +10,16 @@
                     </div>
 
                     <div class="panel-body">
-                        @foreach($activities as $date => $activity)
+                        @forelse($activities as $date => $activity)
                             <h3 class="page-header">{{ $date }}</h3>
                             @foreach($activity as $item)
                                 @if(view()->exists("profiles.activities.{$item->type}"))
                                     @include("profiles.activities.{$item->type}" , ['activity' => $item])
                                 @endif
                             @endforeach
-                        @endforeach
+                        @empty
+                            <p>شما هنوز هیچ فعالیتی نداشته اید!</p>
+                        @endforelse
                     </div>
                 </div>
 

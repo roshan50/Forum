@@ -6,6 +6,7 @@ use App\Reply;
 use App\Thread;
 use function back;
 use Illuminate\Http\Request;
+use function response;
 
 class ReplyController extends Controller
 {
@@ -26,10 +27,19 @@ class ReplyController extends Controller
         return back()->with('flash','your reply has been left');
     }
 
+    public function update(Reply $reply)
+    {
+        $this->authorize('update',$reply);
+        $reply->update(request(['body']));
+    }
+
     public function destroy(Reply $reply)
     {
         $this->authorize('update',$reply);
         $reply->delete();
+        if(\request()->expectsJson()){
+            return response(['status' => 'reply deleted!']);
+        }
         return back();
     }
 }

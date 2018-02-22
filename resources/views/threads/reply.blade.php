@@ -1,3 +1,4 @@
+<reply :attributes="{{ $reply }}" inline-template v-cloak>
 <div id="reply-{{ $reply->id }}" class="panel panel-default">
     <div class="panel-heading">
         <div class="level">
@@ -5,28 +6,34 @@
             {{ $reply->created_at->diffForHumans() }}
 
             <div>
-                <form action="/replies/{{ $reply->id }}/favorites" method="post">
-                    {{ csrf_field() }}
-                    <button type="submit" class="btn btn-default" {{ $reply->isFavorited() ? 'disabled' : '' }}>
-                        Favorite {{ $reply->favorites_count }}
-                    </button>
-                </form>
+                @if(Auth::check())
+                    <favorite :reply="{{ $reply }}"></favorite>
+                @endif
             </div>
         </div>
     </div>
 
     <div class="panel-body">
-        {{ $reply->body }}
+        <div v-if="editing">
+            <div class="form-group">
+                <textarea name="" id="" class="form-control" v-model="attributes.body"></textarea>
+            </div>
+            <button class="btn btn-xs btn-primary" @click="update">ذخیره</button>
+            <button class="btn btn-xs btn-link" @click="editing = false">لغو</button>
+        </div>
+        <div v-else v-text="attributes.body"></div>
     </div>
 
     @can('update',$reply)
         <div class="panel-footer level">
-            <button class="btn btn-xs ml-1">ویرایش</button>
-            <form action="/replies/{{ $reply->id }}" method="post">
-                {{ csrf_field() }}
-                {{ method_field('DELETE') }}
-                <button class="btn btn-danger btn-xs" type="submit">حذف</button>
-            </form>
+            <button class="btn btn-xs ml-1" @click="editing = true">ویرایش</button>
+            <button class="btn btn-danger btn-xs" @click="destroy">حذف</button>
+            {{--<form action="/replies/{{ $reply->id }}" method="post">--}}
+                {{--{{ csrf_field() }}--}}
+                {{--{{ method_field('DELETE') }}--}}
+                {{--<button class="btn btn-danger btn-xs" type="submit">حذف</button>--}}
+            {{--</form>--}}
         </div>
     @endcan
 </div>
+</reply>

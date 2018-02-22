@@ -27,4 +27,9 @@ class FavoriteController extends Controller
 //            'favorited_type'=> get_class($reply)
 //        ]);
     }
+
+    public function destroy(Reply $reply){//write by myself.........
+//        Favorite::where('favorited_id',$reply->id)->delete();
+        $reply->unfavorite();
+    }
 }
