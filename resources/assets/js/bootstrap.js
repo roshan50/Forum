@@ -13,6 +13,11 @@ try {
     require('bootstrap-sass');
 } catch (e) {}
 
+window.Vue = require('vue');
+window.Vue.prototype.authorize = function(handler){
+    let user = window.App.user;
+    return user ? handler(user) : false;
+};
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
  * to our Laravel back-end. This library automatically handles sending the
@@ -21,7 +26,10 @@ try {
 
 window.axios = require('axios');
 
-window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+window.axios.defaults.headers.common={
+    'X-CSRF-TOKEN' : window.App.csrfToken,
+    'X-Requested-With' : 'XMLHttpRequest'
+} ;
 
 /**
  * Next we will register the CSRF Token as a common header with Axios so that

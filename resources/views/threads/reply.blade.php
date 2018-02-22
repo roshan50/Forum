@@ -1,4 +1,4 @@
-<reply :attributes="{{ $reply }}" inline-template v-cloak>
+<reply :data="{{ $reply }}" inline-template v-cloak>
 <div id="reply-{{ $reply->id }}" class="panel panel-default">
     <div class="panel-heading">
         <div class="level">
@@ -28,11 +28,6 @@
         <div class="panel-footer level">
             <button class="btn btn-xs ml-1" @click="editing = true">ویرایش</button>
             <button class="btn btn-danger btn-xs" @click="destroy">حذف</button>
-            {{--<form action="/replies/{{ $reply->id }}" method="post">--}}
-                {{--{{ csrf_field() }}--}}
-                {{--{{ method_field('DELETE') }}--}}
-                {{--<button class="btn btn-danger btn-xs" type="submit">حذف</button>--}}
-            {{--</form>--}}
         </div>
     @endcan
 </div>

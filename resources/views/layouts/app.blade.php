@@ -10,6 +10,14 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
+    <!-- Scripts -->
+    <script>
+        window.App = {!! json_encode([
+            'csrfTokens' => csrf_token(),
+            'user' => Auth::user(),
+            'singedIn'  => Auth::check()
+        ]) !!};
+    </script>
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <style>
@@ -39,5 +47,6 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
+
 </body>
 </html>
