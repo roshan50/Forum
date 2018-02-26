@@ -78,10 +78,7 @@ class ThreadController extends Controller
      */
     public function show($channelId,Thread $thread)
     {
-        return view('threads.show',[
-            'thread'    => $thread,
-            'replies'   => $thread->replies()->paginate(3)
-        ]);
+        return view('threads.show',compact('thread'));
     }
 
     /**

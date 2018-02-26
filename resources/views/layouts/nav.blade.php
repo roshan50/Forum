@@ -27,6 +27,7 @@
                             <li><a href="/threads?by={{ auth()->user()->name }}">بحث های من</a></li>
                         @endif
                         <li><a href="/threads?popular=1">محبوبترین بحث ها</a></li>
+                        <li><a href="/threads?unanswered=1">بحث های بدون پاسخ</a></li>
                     </ul>
                 </li>
 

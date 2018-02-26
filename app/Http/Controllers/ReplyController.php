@@ -12,7 +12,12 @@ class ReplyController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth'); 
+        $this->middleware('auth',['except'=>'index']);
+    }
+
+    public function index($channelId,Thread $thread)
+    {
+        return $thread->replies()->paginate(2);
     }
 
     public function store($channelId,Thread $thread)
