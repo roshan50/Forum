@@ -2,6 +2,7 @@
 
 use Faker\Generator as Faker;
 use Faker\Factory as FactoryFaker;
+use Illuminate\Notifications\DatabaseNotification;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,5 +55,17 @@ $factory->define(App\Reply::class, function (Faker $faker) use ($localisedFaker)
             return factory('App\Thread')->create()->id;
         },
         'body' => $localisedFaker->realText()
+    ];
+});
+
+$factory->define(Illuminate\Notifications\DatabaseNotification::class, function (Faker $faker) use ($localisedFaker){
+    return [
+       'id' => '',
+       'type' => 'App\Notifications\ThreadWasUpdated',
+        'notifiable_id' => function(){
+            return auth()->id() ? : factory('App\User')->create()->id;
+        },
+        'notifiable_type' => 'App\User',
+        'data' => ['foo'=>'bar']
     ];
 });

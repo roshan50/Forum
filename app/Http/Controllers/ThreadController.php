@@ -6,6 +6,8 @@ use App\Channel;
 use App\Thread;
 use App\Filters\ThreadFilters;
 use App\User;
+use function cache;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use function auth;
 use function back;
@@ -78,6 +80,10 @@ class ThreadController extends Controller
      */
     public function show($channelId,Thread $thread)
     {
+        if(auth()->check()){
+            auth()->user()->read($thread);
+        }
+
         return view('threads.show',compact('thread'));
     }
 

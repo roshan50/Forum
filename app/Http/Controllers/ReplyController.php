@@ -6,6 +6,7 @@ use App\Reply;
 use App\Thread;
 use function back;
 use Illuminate\Http\Request;
+use Mockery\Exception;
 use function response;
 
 class ReplyController extends Controller
@@ -22,13 +23,24 @@ class ReplyController extends Controller
 
     public function store($channelId,Thread $thread)
     {
-        $this->validate(request(),[
-            'body'  => 'required'
-        ]);
-        $reply = $thread->addReply([
-            'body'      => request('body'),
-            'user_id'   => auth()->id()
-        ]);
+                    $this->authorize('create',new Reply);
+//        if(Gate::denies('create',new Reply)){
+//            return response(
+//                'you are posting too frequently. please take a break :)',429
+//            );
+//        }
+        try{
+            $this->validate(request(),[
+                'body'  => 'required'
+            ]);
+            $reply = $thread->addReply([
+                'body'      => request('body'),
+                'user_id'   => auth()->id()
+            ]);
+        }catch (Exception $exception){
+            return response('sorry! your reply could not save at this time!',422);
+        }
+
 
         if(\request()->expectsJson()){
             return $reply->load('owner');
@@ -40,7 +52,17 @@ class ReplyController extends Controller
     public function update(Reply $reply)
     {
         $this->authorize('update',$reply);
-        $reply->update(request(['body']));
+        try{
+            $this->validate(request(),[
+                'body'  => 'required'
+            ]);
+            $reply->update(request(['body']));
+        }catch (Exception $exception){
+            return response(
+                'sorry! your reply could not save at this time!',422
+            );
+        }
+
     }
 
     public function destroy(Reply $reply)

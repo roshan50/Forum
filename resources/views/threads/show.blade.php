@@ -37,12 +37,18 @@
             <div class="col-md-4">
                 <div class="panel panel-default">
                     <div class="panel-body">
+                        <p>
                         این بحث
                         {{ $thread->created_at->diffForHumans() }}
                         توسط  <a href="#">{{ $thread->creator->name }}</a>
                         ایجاد شده است و در حال حاضر
                         <span v-text="repliesCount"></span>
                         پاسخ دارد.
+                        </p>
+
+                        <p>
+                            <subscribe-button :active="{{ json_encode($thread->isSubscribedTo) }}"></subscribe-button>
+                        </p>
                     </div>
                 </div>
             </div>

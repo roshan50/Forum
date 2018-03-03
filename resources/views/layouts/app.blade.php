@@ -40,7 +40,7 @@
 <body dir="rtl">
     <div id="app">
       @include('layouts.nav')
-        <Flash message="{{ session('flash') }}"></Flash>
+        <flash message="{{ session('flash') }}"></flash>
         @yield('content')
 
     </div>
