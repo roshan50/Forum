@@ -36,6 +36,7 @@
         }
         [v-cloak] { display: none; }
     </style>
+    @yield('header');
 </head>
 <body dir="rtl">
     <div id="app">

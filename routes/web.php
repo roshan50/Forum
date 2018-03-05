@@ -18,7 +18,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/profiles/{user}','ProfileController@show');
+Route::get('/profiles/{user}','ProfileController@show')->name('profile');
 Route::get('/profiles/{user}/notifications','UserNotificationController@index');
 Route::delete('/profiles/{user}/notifications/{notification}','UserNotificationController@destroy');
 
@@ -40,3 +40,6 @@ Route::delete('/threads/{channel}/{thread}/subscriptions','ThreadSubscriptionCon
 
 Route::post('/replies/{reply}/favorites','FavoriteController@store');
 Route::delete('/replies/{reply}/favorites','FavoriteController@destroy');
+
+Route::get('/api/users','Api\UsersController@index');
+Route::post('/api/users/{user}/avatar','Api\UserAvatarController@store');

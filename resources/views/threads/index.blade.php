@@ -12,17 +12,21 @@
                         @forelse($threads as $thread)
                             <article>
                                 <div class="level">
-                                    <h4 class="flex">
-                                        <a href="{{ $thread->path() }}">
-                                            @if(auth()->check() && $thread->hasUpdateFor(auth()->user()))
-                                                <strong>
+                                    <div class="flex">
+                                        <h4>
+                                            <a href="{{ $thread->path() }}">
+                                                @if(auth()->check() && $thread->hasUpdateFor(auth()->user()))
+                                                    <strong>
+                                                        {{ $thread->title }}
+                                                    </strong>
+                                                @else
                                                     {{ $thread->title }}
-                                                </strong>
-                                            @else
-                                                {{ $thread->title }}
-                                            @endif
-                                        </a>
-                                    </h4>
+                                                @endif
+                                            </a>
+                                        </h4>
+
+                                        <h5>پست شده توسط: <a href="{{ route('profile', $thread->creator) }}"> {{ $thread->creator->name }} </a></h5>
+                                    </div>
                                     <strong>{{ $thread->replies_count }} پاسخ </strong>
                                 </div>
                                 <div class="body"> {{ $thread->body }} </div>
@@ -33,6 +37,7 @@
                         @endforelse
                     </div>
                 </div>
+                {{ $threads->render() }}
             </div>
         </div>
     </div>

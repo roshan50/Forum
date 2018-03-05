@@ -5,6 +5,7 @@ namespace App;
 use function auth;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use function preg_replace;
 
 class Reply extends Model
 {
@@ -45,5 +46,16 @@ class Reply extends Model
     public function wasJustPublished()
     {
         return $this->created_at->gt(Carbon::now()->subMinute());
+    }
+
+    public function mentionedUsers()
+    {
+        preg_match_all('/\@([\w\-]+)/',$this->body,$matches); //not space or .
+        return $matches[1]; //without @
+    }
+
+    public function setBodyAttribute($body)
+    {
+        $this->attributes['body'] = preg_replace('/@([\w\-]+)/','<a href="/profiles/$1">$0</a>',$body);
     }
 }

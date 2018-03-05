@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Forms\CreatePostForm;
 use App\Reply;
 use App\Thread;
+use App\User;
 use function back;
 use Illuminate\Http\Request;
 use Mockery\Exception;
+use function preg_match_all;
 use function response;
+use App\Notifications\YouWhereMentioned;
 
 class ReplyController extends Controller
 {
@@ -23,7 +27,7 @@ class ReplyController extends Controller
 
     public function store($channelId,Thread $thread)
     {
-                    $this->authorize('create',new Reply);
+//        $this->authorize('create',new Reply);
 //        if(Gate::denies('create',new Reply)){
 //            return response(
 //                'you are posting too frequently. please take a break :)',429
@@ -51,7 +55,7 @@ class ReplyController extends Controller
 
     public function update(Reply $reply)
     {
-        $this->authorize('update',$reply);
+//        $this->authorize('update',$reply);
         try{
             $this->validate(request(),[
                 'body'  => 'required'

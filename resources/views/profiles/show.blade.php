@@ -5,8 +5,7 @@
             <div class="col-md-8">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h4>{{ $user->name }}</h4>
-                        <small>Since {{ $user->created_at->diffForHumans() }}</small>
+                        <avatar-form :user="{{ $user }}"></avatar-form>
                     </div>
 
                     <div class="panel-body">
@@ -18,13 +17,13 @@
                                 @endif
                             @endforeach
                         @empty
-                            <p>شما هنوز هیچ فعالیتی نداشته اید!</p>
+                            <p>بدون فعالیت!</p>
                         @endforelse
                     </div>
                 </div>
 
             </div>
 
-
     </div>
+</div>
 @endsection

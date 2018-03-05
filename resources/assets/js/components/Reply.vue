@@ -16,13 +16,15 @@
 
     <div class="panel-body">
       <div v-if="editing">
-        <div class="form-group">
-          <textarea name="" id="" class="form-control" v-model="data.body"></textarea>
-        </div>
-        <button class="btn btn-xs btn-primary" @click="update">ذخیره</button>
-        <button class="btn btn-xs btn-link" @click="editing = false">لغو</button>
+        <!--<form @submit="update">-->
+          <div class="form-group">
+            <textarea class="form-control" v-model="data.body" required></textarea>
+          </div>
+          <button class="btn btn-xs btn-primary" @click="update">ذخیره</button>
+          <button class="btn btn-xs btn-link" @click="editing = false">لغو</button>
+        <!--</form>-->
       </div>
-      <div v-else v-text="data.body"></div>
+      <div v-else v-html="data.body"></div>
     </div>
 
     <div class="panel-footer level">
@@ -37,7 +39,7 @@
     import Favorite from './Favorite.vue';
     // import moment from 'moment';
     export default {
-        props : ['data', 'editing'],
+        props : ['data','editing'],
         components : { Favorite },
           date() {
               return{
@@ -52,7 +54,10 @@
             },
             canUpdate(){
                 return this.authorize(user => this.data.user_id == window.App.user.id);
-            }
+            }/*,
+            editing(){
+                return false;
+            }*/
         },
         methods:{
             update(){
@@ -62,7 +67,7 @@
                     flash(error.response.data,'danger');
                 });
 
-                this.editing = false;
+                 this.editing = false;
 
                 flash('updated!');
             },

@@ -13,7 +13,6 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 class ThreadHasNewReply
 {
     use SerializesModels;
-    public $thread;
     public $reply;
 
     /**
@@ -21,9 +20,8 @@ class ThreadHasNewReply
      *
      * @return void
      */
-    public function __construct($thread,$reply)
+    public function __construct($reply)
     {
-        $this->thread = $thread;
         $this->reply = $reply;
     }
 

@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Notifications\ThreadWasUpdated;
+use App\Notifications\YouWhereMentioned;
 use App\Events\ThreadHasNewReply;
 use function auth;
 use function cache;
@@ -52,7 +53,10 @@ class Thread extends Model
     public function addReply($reply){
         $reply = $this->replies()->create($reply);
 
+//        event(new ThreadHasNewReply($reply));
+
         $this->notifySubscribers($reply);
+        $this->notifyMentioned($reply);
 //        event(new ThreadHasNewReply($this,$reply));
 
         return $reply;
@@ -76,6 +80,18 @@ class Thread extends Model
         foreach ($this->subscriptions as $subscription){
             if($subscription->user_id != $reply->user_id){
                 $subscription->user->notify(new ThreadWasUpdated($this,$reply));
+            }
+        }
+    }
+
+    public function notifyMentioned($reply)
+    {
+        preg_match_all('/\@([^\s\.]+)/',$reply->body,$matches);
+        $mentionedUsers = $matches[1];
+        foreach ($mentionedUsers as $name){
+            $user = User::whereName($name)->first();
+            if($user){
+                $user->notify(new YouWhereMentioned($reply));
             }
         }
     }
