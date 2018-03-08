@@ -6,15 +6,20 @@ use App\Channel;
 use App\Thread;
 use App\Filters\ThreadFilters;
 use App\User;
+use function array_map;
 use function cache;
 use Carbon\Carbon;
+use function collect;
 use Illuminate\Http\Request;
 use function auth;
 use function back;
 use function compact;
+use function json_decode;
+use function json_encode;
 use function redirect;
 use function response;
 use function view;
+use App\Trending;
 
 class ThreadController extends Controller
 {
@@ -28,7 +33,7 @@ class ThreadController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Channel $channel,ThreadFilters $filters)
+    public function index(Channel $channel,ThreadFilters $filters,Trending $trending)
     {
         $threads = $this->getThreads($channel, $filters);
 
@@ -36,7 +41,8 @@ class ThreadController extends Controller
             return $threads;
         }
 
-        return view('threads.index',compact('threads'));
+        $trending = $trending->get();
+        return view('threads.index',compact('threads','trending'));
     }
 
     /**
@@ -78,11 +84,14 @@ class ThreadController extends Controller
      * @param  \App\Thread  $thread
      * @return \Illuminate\Http\Response
      */
-    public function show($channelId,Thread $thread)
+    public function show($channelId,Thread $thread,Trending $trending)
     {
         if(auth()->check()){
             auth()->user()->read($thread);
         }
+
+        $trending->push($thread);
+        $thread->recordVisit();
 
         return view('threads.show',compact('thread'));
     }

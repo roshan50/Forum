@@ -15,7 +15,7 @@ use function strtolower;
 
 class Thread extends Model
 {
-    use RecordActivity;
+    use RecordActivity,RecordsVisits;
 
     protected $guarded=[];
     protected $with=['creator','channel'];
