@@ -24,7 +24,7 @@ Route::delete('/profiles/{user}/notifications/{notification}','UserNotificationC
 
 //Route::resource('threads','ThreadController');
 Route::get('threads','ThreadController@index');
-Route::post('threads','ThreadController@store');
+Route::post('threads','ThreadController@store')->middleware('must-be-confirmed');
 Route::get('threads/create','ThreadController@create');
 Route::get('threads/{channel}/{thread}','ThreadController@show');
 Route::delete('threads/{channel}/{thread}','ThreadController@destroy');
