@@ -15,7 +15,7 @@ use function strtolower;
 
 class Thread extends Model
 {
-    use RecordActivity,RecordsVisits;
+    use RecordActivity;
 
     protected $guarded=[];
     protected $with=['creator','channel'];
@@ -131,5 +131,10 @@ class Thread extends Model
     {
         $key = $user->visitedThreadCacheKey($this);
         return $this->updated_at > cache($key);
+    }
+
+    public function visits()
+    {
+        return new Visits($this);
     }
 }
