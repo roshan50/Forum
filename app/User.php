@@ -28,6 +28,10 @@ class User extends Authenticatable
         'password', 'remember_token','email'
     ];
 
+    protected $casts = [
+      'confirmed' => 'boolean'
+    ];
+
     public function threads()
     {
         return $this->hasMany(Thread::class)->latest();
@@ -36,6 +40,12 @@ class User extends Authenticatable
     public function activity()
     {
         return $this->hasMany(Activity::class);
+    }
+
+    public function confirm()
+    {
+        $this->confirmed = 1;
+        $this->save();
     }
 
     public function lastReply()

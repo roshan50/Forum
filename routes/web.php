@@ -22,6 +22,8 @@ Route::get('/profiles/{user}','ProfileController@show')->name('profile');
 Route::get('/profiles/{user}/notifications','UserNotificationController@index');
 Route::delete('/profiles/{user}/notifications/{notification}','UserNotificationController@destroy');
 
+Route::get('/register/confirm','Api\RegisterConfirmationController@index');
+
 //Route::resource('threads','ThreadController');
 Route::get('threads','ThreadController@index');
 Route::post('threads','ThreadController@store')->middleware('must-be-confirmed');
