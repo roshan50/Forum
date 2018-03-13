@@ -18,6 +18,7 @@ use function json_decode;
 use function json_encode;
 use function redirect;
 use function response;
+use function str_slug;
 use function view;
 use App\Trending;
 
@@ -72,7 +73,8 @@ class ThreadController extends Controller
            'user_id' => auth()->id(),
            'channel_id' => request('channel_id'),
            'title'   => request('title'),
-           'body'    => request('body')
+           'body'    => request('body'),
+            'slug'   =>str_slug(\request('title'))
         ]);
         return redirect($thread->path())
             ->with('flash','بحث شما با موفقیت ایجاد شد!');

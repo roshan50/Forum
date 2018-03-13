@@ -10,7 +10,10 @@ use function cache;
 use function event;
 use function get_class;
 use Illuminate\Database\Eloquent\Model;
+use function is_numeric;
+use function preg_replace_callback;
 use function sprintf;
+use function str_slug;
 use function strtolower;
 
 class Thread extends Model
@@ -38,7 +41,7 @@ class Thread extends Model
 
     public function path()
     {
-        return "/threads/{$this->channel->slug }/{$this->id}";
+        return "/threads/{$this->channel->slug }/{$this->slug}";
     }
     public function replies(){
         return $this->hasMany(Reply::class);
@@ -133,8 +136,28 @@ class Thread extends Model
         return $this->updated_at > cache($key);
     }
 
-    public function visits()
+    public function getRouteKeyName()
     {
-        return new Visits($this);
+        return 'slug';
+    }
+
+    public function setSlugAttribute($value)
+    {
+        if(static::whereSlug($slug = str_slug($value))->exists()){
+            $slug = $this->incrementSlug($slug);
+        }
+
+        $this->attributes['slug'] = $slug;
+    }
+
+    public function incrementSlug($slug)
+    {
+        $max = static::whereSlug($this->title)->latest('id')->value('slug');
+        if(is_numeric($max[-1])){
+            return preg_replace_callback('/(\d+)$/',function ($matches){
+                return $matches[1] + 1;
+            },$max);
+        }
+        return "{$slug}-2";
     }
 }

@@ -26,6 +26,7 @@ $factory->define(App\User::class, function (Faker $faker) use ($localisedFaker){
 });
 
 $factory->define(App\Thread::class, function (Faker $faker) use ($localisedFaker){
+    $title = $localisedFaker->name();
     return [
         'user_id'=> function(){
             return factory('App\User')->create()->id;
@@ -33,8 +34,9 @@ $factory->define(App\Thread::class, function (Faker $faker) use ($localisedFaker
         'channel_id'=> function(){
             return factory('App\Channel')->create()->id;
         },
-        'title' => $localisedFaker->name(),
-        'body' => $localisedFaker->realText()
+        'title' => $title,
+        'body' => $localisedFaker->realText(),
+        'slug' => str_slug($title)
     ];
 });
 
