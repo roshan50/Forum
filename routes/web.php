@@ -43,5 +43,7 @@ Route::delete('/threads/{channel}/{thread}/subscriptions','ThreadSubscriptionCon
 Route::post('/replies/{reply}/favorites','FavoriteController@store');
 Route::delete('/replies/{reply}/favorites','FavoriteController@destroy');
 
+Route::post('/replies/{reply}/best','BestReplyController@store');
+
 Route::get('/api/users','Api\UsersController@index');
 Route::post('/api/users/{user}/avatar','Api\UserAvatarController@store');

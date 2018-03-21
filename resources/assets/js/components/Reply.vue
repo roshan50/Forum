@@ -1,5 +1,5 @@
 <template>
-  <div :id="'reply-'+data.id" class="panel panel-default">
+  <div :id="'reply-'+data.id" class="panel" :class="isBest ? 'panel-success' : 'panel-default'">
     <div class="panel-heading">
       <div class="level">
         <h5 class="flex">
@@ -28,8 +28,11 @@
     </div>
 
     <div class="panel-footer level">
-      <button class="btn btn-xs ml-1" @click="editing = true">ویرایش</button>
-      <button class="btn btn-danger btn-xs" @click="destroy">حذف</button>
+      <div v-if="canUpdate">
+        <button class="btn btn-xs ml-1" @click="editing = true">ویرایش</button>
+        <button class="btn btn-danger btn-xs" @click="destroy">حذف</button>
+      </div>
+      <button class="btn btn-default btn-xs mr-a" @click="markBestReply" v-show="! isBest">بهترین پاسخ؟</button>
     </div>
 
   </div>
@@ -39,13 +42,14 @@
     import Favorite from './Favorite.vue';
     // import moment from 'moment';
     export default {
-        props : ['data','editing'],
+        props : ['data','editing','isBest'],
         components : { Favorite },
           date() {
               return{
                   editing : false,
                   id : this.data.id,
-                  body : this.data.body
+                  body : this.data.body,
+                  isBest : false
               };
           },
         computed:{
@@ -78,6 +82,9 @@
                 $(this.$el).fadeOut(300,()=>{
                     flash('delete!');
                 });
+            },
+            markBestReply(){
+                this.isBest = true;
             }
 
         }

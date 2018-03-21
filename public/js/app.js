@@ -44435,17 +44435,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 
 // import moment from 'moment';
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['data', 'editing'],
+    props: ['data', 'editing', 'isBest'],
     components: { Favorite: __WEBPACK_IMPORTED_MODULE_0__Favorite_vue___default.a },
     date: function date() {
         return {
             editing: false,
             id: this.data.id,
-            body: this.data.body
+            body: this.data.body,
+            isBest: false
         };
     },
 
@@ -44483,6 +44487,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             $(this.$el).fadeOut(300, function () {
                 flash('delete!');
             });
+        },
+        markBestReply: function markBestReply() {
+            this.isBest = true;
         }
     }
 });
@@ -44626,7 +44633,8 @@ var render = function() {
   return _c(
     "div",
     {
-      staticClass: "panel panel-default",
+      staticClass: "panel",
+      class: _vm.isBest ? "panel-success" : "panel-default",
       attrs: { id: "reply-" + _vm.data.id }
     },
     [
@@ -44699,23 +44707,47 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "panel-footer level" }, [
-        _c(
-          "button",
-          {
-            staticClass: "btn btn-xs ml-1",
-            on: {
-              click: function($event) {
-                _vm.editing = true
-              }
-            }
-          },
-          [_vm._v("ویرایش")]
-        ),
+        _vm.canUpdate
+          ? _c("div", [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-xs ml-1",
+                  on: {
+                    click: function($event) {
+                      _vm.editing = true
+                    }
+                  }
+                },
+                [_vm._v("ویرایش")]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-danger btn-xs",
+                  on: { click: _vm.destroy }
+                },
+                [_vm._v("حذف")]
+              )
+            ])
+          : _vm._e(),
         _vm._v(" "),
         _c(
           "button",
-          { staticClass: "btn btn-danger btn-xs", on: { click: _vm.destroy } },
-          [_vm._v("حذف")]
+          {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: !_vm.isBest,
+                expression: "! isBest"
+              }
+            ],
+            staticClass: "btn btn-default btn-xs mr-a",
+            on: { click: _vm.markBestReply }
+          },
+          [_vm._v("بهترین پاسخ؟")]
         )
       ])
     ]

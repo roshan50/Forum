@@ -34,6 +34,9 @@
         .ml-1{
             margin-left: 1em;
         }
+        .mr-a{
+            margin-right: auto;
+        }
         [v-cloak] { display: none; }
     </style>
     @yield('header');
