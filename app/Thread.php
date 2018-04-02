@@ -11,6 +11,7 @@ use function event;
 use function get_class;
 use Illuminate\Database\Eloquent\Model;
 use function is_numeric;
+use Laravel\Scout\Searchable;
 use function preg_replace_callback;
 use function sprintf;
 use function str_slug;
@@ -18,7 +19,7 @@ use function strtolower;
 
 class Thread extends Model
 {
-    use RecordActivity;
+    use RecordActivity,Searchable;
 
     protected $guarded=[];
     protected $with=['creator','channel'];
@@ -159,5 +160,20 @@ class Thread extends Model
             },$max);
         }
         return "{$slug}-2";
+    }
+
+    public function lock()
+    {
+        $this->update(['locked' => 1]);
+    }
+
+    public function unlock()
+    {
+        $this->update(['locked' => 0]);
+    }
+
+    public function toSearchableArray()
+    {
+        return $this->toArray() + ['path' => $this->path()];
     }
 }

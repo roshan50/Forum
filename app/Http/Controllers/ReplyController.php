@@ -33,6 +33,11 @@ class ReplyController extends Controller
 //                'you are posting too frequently. please take a break :)',429
 //            );
 //        }
+
+        if($thread->locked){
+            return response('thread is locked',422);
+        }
+
         try{
             $this->validate(request(),[
                 'body'  => 'required'

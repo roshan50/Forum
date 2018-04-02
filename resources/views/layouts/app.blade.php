@@ -15,11 +15,12 @@
         window.App = {!! json_encode([
             'csrfTokens' => csrf_token(),
             'user' => Auth::user(),
-            'singedIn'  => Auth::check()
+            'signedIn'  => Auth::check()
         ]) !!};
     </script>
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/trix/0.11.2/trix.css" rel="stylesheet">
     <style>
         body{
             padding-bottom: 100px;
@@ -37,7 +38,13 @@
         .mr-a{
             margin-right: auto;
         }
-        [v-cloak] { display: none; }
+        [v-cloak] {
+            display: none;
+        }
+        .ais-highlighted > em{
+            background-color: yellow;
+            font-style: normal;
+        }
     </style>
     @yield('header');
 </head>

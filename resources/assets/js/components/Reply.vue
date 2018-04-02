@@ -6,7 +6,7 @@
           <a :href="'/profiles/'+data.owner.name"
             v-text="data.owner.name">
           </a> said
-          {{ data.created_at }}
+          <span v-text="ago"></span>
         </h5>
         <div v-if="signedIn">
           <favorite :reply="data"></favorite>
@@ -18,7 +18,8 @@
       <div v-if="editing">
         <!--<form @submit="update">-->
           <div class="form-group">
-            <textarea class="form-control" v-model="data.body" required></textarea>
+            <wysiwyg v-model="body"></wysiwyg>
+            <!--<textarea class="form-control" v-model="data.body" required></textarea>-->
           </div>
           <button class="btn btn-xs btn-primary" @click="update">ذخیره</button>
           <button class="btn btn-xs btn-link" @click="editing = false">لغو</button>
@@ -27,12 +28,12 @@
       <div v-else v-html="data.body"></div>
     </div>
 
-    <div class="panel-footer level">
-      <div v-if="canUpdate">
+    <div class="panel-footer level" v-if="authorize('updateReply',reply) || authorize('updateThread',thread)">
+      <div v-if="authorize('updateReply',reply)">
         <button class="btn btn-xs ml-1" @click="editing = true">ویرایش</button>
         <button class="btn btn-danger btn-xs" @click="destroy">حذف</button>
       </div>
-      <button class="btn btn-default btn-xs mr-a" @click="markBestReply" v-show="! isBest">بهترین پاسخ؟</button>
+      <button class="btn btn-default btn-xs mr-a" @click="markBestReply" v-if="authorize('updateThread',thread)">بهترین پاسخ؟</button>
     </div>
 
   </div>
@@ -40,25 +41,35 @@
 
 <script>
     import Favorite from './Favorite.vue';
-    // import moment from 'moment';
+    import moment from 'moment';
     export default {
-        props : ['data','editing','isBest'],
+        props : ['data','editing'],
         components : { Favorite },
           date() {
               return{
                   editing : false,
                   id : this.data.id,
                   body : this.data.body,
-                  isBest : false
-              };
+                  // thread : window.thread,
+                  // reply : this.data
+              }
           },
         computed:{
-            signedIn(){
-                return window.App.singedIn;
+            ago(){
+                return moment(this.data.created_at).fromNow();
             },
-            canUpdate(){
-                return this.authorize(user => this.data.user_id == window.App.user.id);
-            }/*,
+            reply(){
+                return this.data;
+            },
+            thread(){
+                return window.thread;
+            },
+            isBest(){
+                console.log(this.data.id);console.log(window.thread.best_reply_id);
+                console.log(window.thread.best_reply_id == this.id);
+                return window.thread.best_reply_id == this.id;
+            }
+            /*,
             editing(){
                 return false;
             }*/
@@ -84,7 +95,9 @@
                 });
             },
             markBestReply(){
-                this.isBest = true;
+                axios.post('/replies/'+this.data.id+'/best');
+                console.log(this.data.id);
+                window.thread.best_reply_id = this.data.id;
             }
 
         }

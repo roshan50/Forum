@@ -10,17 +10,20 @@ use function array_map;
 use function cache;
 use Carbon\Carbon;
 use function collect;
+use function config;
 use Illuminate\Http\Request;
 use function auth;
 use function back;
 use function compact;
 use function json_decode;
 use function json_encode;
+use Mockery\Exception;
 use function redirect;
 use function response;
 use function str_slug;
 use function view;
 use App\Trending;
+use Zttp\Zttp;
 
 class ThreadController extends Controller
 {
@@ -62,13 +65,24 @@ class ThreadController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(/*Recaptcha $recaptcha*/)
     {
-        $this->validate($request,[
+        request()->validate([
             'title' => 'required',
             'body'  => 'required',
             'channel_id' => 'required|exists:channels,id'
         ]);
+
+//        $response = Zttp::asFormParams()->post('https://www.google.com/recaptcha/api/siteverify',[
+//            'secret' => config('services.recaptcha.secret'),
+//            'response' => request()->input('g-recaptcha-response'),
+//            'remoteip' => $_SERVER['REMOTE_ADDR']
+//        ]);
+
+//        if(! $response->json()['success']){
+//            throw new Exception('recaptcha failed');
+//        }
+
         $thread = Thread::create([
            'user_id' => auth()->id(),
            'channel_id' => request('channel_id'),
@@ -116,9 +130,15 @@ class ThreadController extends Controller
      * @param  \App\Thread  $thread
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Thread $thread)
+    public function update($channel, Thread $thread)
     {
-        //
+        $this->authorize('update',$thread);
+        $data = \request()->validate([
+            'title' => 'required',
+            'body'  => 'required',
+        ]);
+        $thread->update($data);
+        return $thread;
     }
 
     /**

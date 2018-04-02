@@ -27,10 +27,16 @@ Route::get('/register/confirm','Api\RegisterConfirmationController@index');
 //Route::resource('threads','ThreadController');
 Route::get('threads','ThreadController@index');
 Route::post('threads','ThreadController@store')->middleware('must-be-confirmed');
+Route::patch('threads/{channel}/{thread}','ThreadController@update');
 Route::get('threads/create','ThreadController@create');
 Route::get('threads/{channel}/{thread}','ThreadController@show');
 Route::delete('threads/{channel}/{thread}','ThreadController@destroy');
 Route::get('threads/{channel}','ThreadController@index');
+
+Route::get('threads/search','SearchController@show');
+
+Route::post('locked-threads/{thread}','LockedThreadController@store')->middleware('admin');
+Route::delete('locked-threads/{thread}','LockedThreadController@destroy')->middleware('admin');
 
 Route::get('threads/{channel}/{thread}/replies','ReplyController@index');
 Route::post('threads/{channel}/{thread}/replies','ReplyController@store')->name('add_reply');

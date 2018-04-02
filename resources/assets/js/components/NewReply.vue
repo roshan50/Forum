@@ -2,12 +2,18 @@
   <div>
     <div v-if="signedIn">
         <div class="form-group">
-          <textarea name="body"
-                    id="body"
-                    class="form-control"
-                    required
-                    v-model="body"
-                    placeholder="نظر"></textarea>
+          <wysiwyg name="body"
+                   v-model="body"
+                   placeholder="نظر"
+                   :shouldClear="completed"
+          ></wysiwyg>
+
+          <!--<textarea name="body"-->
+                    <!--id="body"-->
+                    <!--class="form-control"-->
+                    <!--required-->
+                    <!--v-model="body"-->
+                    <!--placeholder="نظر"></textarea>-->
         </div>
         <button type="submit"
               class="btn btn-default"
@@ -26,13 +32,9 @@
       props : ['endpoint'],
       data(){
           return{
-              'body' : ''
+              'body' : '',
+              completed : false
           }
-      },
-      computed: {
-          signedIn() {
-              return window.App.singedIn;
-          },
       },
       mounted(){
         $("#body").atwho({
@@ -55,6 +57,7 @@
                   })
                   .then(({data})=>{
                       this.body = '';
+                      this.completed = true;
                       // flash('your reply has been posted.');
                       this.$emit('created',data);
                   });

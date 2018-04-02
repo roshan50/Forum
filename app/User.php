@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use \Carbon\Carbon;
+use function in_array;
 
 class User extends Authenticatable
 {
@@ -46,6 +47,11 @@ class User extends Authenticatable
     {
         $this->confirmed = 1;
         $this->save();
+    }
+
+    public function isAdmin()
+    {
+        return in_array($this->name,['maryam','rahele']);
     }
 
     public function lastReply()
