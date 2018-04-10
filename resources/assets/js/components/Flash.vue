@@ -26,23 +26,6 @@
             window.events.$on(
                 'flash', data=>this.flash(data)
             );
-            // window.flash = {
-            //     success(message) {
-            //         Bus.$emit('flash', data=>this.flash(data) );
-            //     },
-            //     warning(message) {
-            //         Bus.$emit('flash', data=>this.flash(data) );
-            //     },
-            //     danger(message) {
-            //         Bus.$emit('flash', data=>this.flash(data));
-            //     },
-            //     error(message) {
-            //         Bus.$emit('flash', data=>this.flash(data) );
-            //     },
-            //     notify(message) {
-            //         Bus.$emit('flash', data=>this.flash(data));
-            //     }
-            // }
         },
 
         methods:{

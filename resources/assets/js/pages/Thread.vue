@@ -22,10 +22,10 @@
               this.locked = ! this.locked;
           },
           update(){
-            axios.patch('/threads/'+this.thread.channel.slug+'/'+this.thread.slug,this.form).then(()=>{
-                this.editing = false;
-                // console.log('بحث شما بروز شد!');
-                flash('بحث شما بروز شد!');
+            axios.patch('/threads/'+this.thread.channel.slug+'/'+this.thread.slug,this.form)
+                .then(()=>{
+                  this.editing = false;
+                  flash('بحث شما بروز شد!');
             });
           },
           cancel(){

@@ -29,7 +29,7 @@
                                 <label for="title">عنوان</label>
                                 <input type="text" name="title" id="title" required
                                        class="form-control" value="{{ old('title') }}">
-                            </div>
+                            </div>P
                             <div class="form-group">
                                 <label for="body">متن</label>
                                 <wysiwyg name="body"></wysiwyg>

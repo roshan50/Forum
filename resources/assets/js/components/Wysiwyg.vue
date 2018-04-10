@@ -10,7 +10,6 @@
       props:['name','value','placeholder','shouldClear'],
       mounted(){
         this.$refs.trix.addEventListener('trix-change', e =>{
-            console.log('handling');
             this.$emit('input',e.target.innerHTML);
         });
 

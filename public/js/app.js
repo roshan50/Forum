@@ -38780,10 +38780,11 @@ Vue.prototype.authorize = function () {
 };
 Vue.prototype.signedIn = window.App.signedIn;
 
+window.events = new Vue();
 window.flash = function (message) {
     var level = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'success';
 
-    window.events.$emit(flash, { message: message, level: level });
+    window.events.$emit('flash', { message: message, level: level });
 };
 
 window.events = new Vue();
@@ -59888,23 +59889,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         window.events.$on('flash', function (data) {
             return _this.flash(data);
         });
-        // window.flash = {
-        //     success(message) {
-        //         Bus.$emit('flash', data=>this.flash(data) );
-        //     },
-        //     warning(message) {
-        //         Bus.$emit('flash', data=>this.flash(data) );
-        //     },
-        //     danger(message) {
-        //         Bus.$emit('flash', data=>this.flash(data));
-        //     },
-        //     error(message) {
-        //         Bus.$emit('flash', data=>this.flash(data) );
-        //     },
-        //     notify(message) {
-        //         Bus.$emit('flash', data=>this.flash(data));
-        //     }
-        // }
     },
 
 
@@ -60616,7 +60600,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         var _this = this;
 
         this.$refs.trix.addEventListener('trix-change', function (e) {
-            console.log('handling');
             _this.$emit('input', e.target.innerHTML);
         });
 
@@ -60786,7 +60769,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             axios.patch('/threads/' + this.thread.channel.slug + '/' + this.thread.slug, this.form).then(function () {
                 _this.editing = false;
-                // console.log('بحث شما بروز شد!');
                 flash('بحث شما بروز شد!');
             });
         },

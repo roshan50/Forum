@@ -29,8 +29,9 @@ Vue.prototype.authorize = function(...params){
 };
 Vue.prototype.signedIn = window.App.signedIn;
 
+window.events = new Vue();
 window.flash = function (message,level='success') {
-    window.events.$emit(flash,{message,level});
+    window.events.$emit('flash',{message,level});
 }
 
 window.events = new Vue();
